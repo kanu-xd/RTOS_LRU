@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LRU Cache Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 10px;
+        }
+        .cache {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>LRU Cache Simulator</h2>
+        <label for="cacheSize">Enter the size of the cache:</label>
+        <input type="number" id="cacheSize">
+        <button onclick="initializeCache()">Initialize Cache</button>
+
+        <label for="cacheItem">Enter the item to access:</label>
+        <input type="number" id="cacheItem">
+        <button onclick="accessCache()">Access Cache</button>
+
+        <div class="cache" id="cacheContents">
+            Cache: 
+        </div>
+    </div>
+
+    <script>
+        let cache = [];
+        let cacheSize = 0;
+
+        function initializeCache() {
+            cache = [];
+            cacheSize = parseInt(document.getElementById('cacheSize').value);
+            displayCache();
+        }
+
+        function accessCache() {
+            const item = parseInt(document.getElementById('cacheItem').value);
+            if (!isNaN(item)) {
+                cacheAccess(item);
+                displayCache();
+            }
+        }
+
+        function cacheAccess(item) {
+            const index = cache.indexOf(item);
+            if (index !== -1) {
+                // Move the accessed item to the front of the cache (most recently used)
+                cache.splice(index, 1);
+                cache.unshift(item);
+            } else {
+                if (cache.length >= cacheSize) {
+                    // Remove the least recently used item (last item in the cache)
+                    cache.pop();
+                }
+                // Add the new item to the front of the cache (most recently used)
+                cache.unshift(item);
+            }
+        }
+
+        function displayCache() {
+            const cacheContents = document.getElementById('cacheContents');
+            cacheContents.innerHTML = 'Cache: ' + cache.join(' ');
+        }
+    </script>
+</body>
+</html>
